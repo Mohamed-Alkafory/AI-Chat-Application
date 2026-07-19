@@ -5,7 +5,7 @@ export default function ChatPage() {
   return (
     <>
       <Navbar />
-      <div className="flex flex-col h-dvh pt-16">
+      <div className="flex flex-col h-dvh pt-16 overflow-hidden">
         <Chat />
       </div>
     </>
