@@ -1,0 +1,20 @@
+import { defineConfig } from "@playwright/test";
+
+export default defineConfig({
+  testDir: "./tests/e2e",
+  timeout: 30000,
+  retries: 0,
+  use: {
+    baseURL: "http://localhost:3000",
+    headless: true,
+  },
+  webServer: {
+    command: "npm run dev -- -p 3000",
+    port: 3000,
+    reuseExistingServer: !process.env.CI,
+    timeout: 30000,
+    env: {
+      GOOGLE_GENERATIVE_AI_API_KEY: "test-mock-key",
+    },
+  },
+});
