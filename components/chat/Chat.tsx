@@ -3,6 +3,8 @@
 import { useState, type FormEvent, useCallback, useRef } from "react";
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
+import { Send, Square } from "lucide-react";
+import Sidebar from "./Sidebar";
 import MessageList from "./MessageList";
 import { ErrorCard } from "./ErrorCard";
 
@@ -64,78 +66,86 @@ export default function Chat() {
   const getErrorType = () => {
     if (!error) return null;
     const msg = error.message?.toLowerCase() || "";
-    if (msg.includes("429") || msg.includes("rate limit") || msg.includes("quota")) return "rate-limit";
-    if (msg.includes("fetch") || msg.includes("network") || msg.includes("econnrefused") || msg.includes("enotfound")) return "network";
+    if (
+      msg.includes("429") ||
+      msg.includes("rate limit") ||
+      msg.includes("quota")
+    )
+      return "rate-limit";
+    if (
+      msg.includes("fetch") ||
+      msg.includes("network") ||
+      msg.includes("econnrefused") ||
+      msg.includes("enotfound")
+    )
+      return "network";
     if (msg.includes("tool")) return "tool";
     return "api";
   };
 
   return (
-    <div className="flex flex-col h-full">
-      <MessageList
-        messages={messages}
-        isLoading={isLoading}
-        retrying={retrying}
-        onExamplePrompt={handleExamplePrompt}
-      />
+    <div className="flex h-full">
+      <Sidebar />
+      <div className="flex-1 flex flex-col min-w-0">
+        <MessageList
+          messages={messages}
+          isLoading={isLoading}
+          retrying={retrying}
+          onExamplePrompt={handleExamplePrompt}
+        />
 
-      {isError && (
-        <div className="mx-4 mb-3">
-          <ErrorCard
-            errorType={hasPartialAssistant ? "mid-stream" : getErrorType()}
-            hasPartialAssistant={hasPartialAssistant}
-            onRetry={handleRetry}
-            retrying={retrying}
-          />
-        </div>
-      )}
-
-      <form
-        ref={formRef}
-        onSubmit={handleSubmit}
-        className="border-t border-border p-4 pb-[calc(1rem+env(safe-area-inset-bottom))] bg-background/50 backdrop-blur-sm"
-      >
-        <div className="flex items-end gap-2 max-w-3xl mx-auto">
-          <div className="flex-1 relative">
-            <input
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              placeholder="Ask about scoring a lead..."
-              disabled={isLoading || retrying}
-              className="w-full rounded-xl border border-border bg-card px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary/50 disabled:opacity-50 transition-all"
+        {isError && (
+          <div className="px-4 pb-3 max-w-3xl mx-auto w-full">
+            <ErrorCard
+              errorType={hasPartialAssistant ? "mid-stream" : getErrorType()}
+              hasPartialAssistant={hasPartialAssistant}
+              onRetry={handleRetry}
+              retrying={retrying}
             />
           </div>
-          {isLoading && (
-            <button
-              type="button"
-              onClick={stop}
-              className="shrink-0 px-3 h-10 rounded-xl bg-muted text-muted-foreground text-sm font-medium hover:text-foreground transition-colors"
-            >
-              Stop
-            </button>
-          )}
-          <button
-            type="submit"
-            disabled={!input.trim() || isLoading || retrying}
-            className="shrink-0 w-10 h-10 rounded-xl bg-gradient-to-r from-primary to-accent text-primary-foreground flex items-center justify-center hover:shadow-lg hover:shadow-primary/25 transition-all duration-300 disabled:opacity-40 disabled:hover:shadow-none"
-            aria-label="Send message"
+        )}
+
+        <div className="border-t border-border bg-background/80 backdrop-blur-lg">
+          <form
+            ref={formRef}
+            onSubmit={handleSubmit}
+            className="max-w-3xl mx-auto w-full px-4 py-4 pb-[calc(1rem+env(safe-area-inset-bottom))]"
+            aria-label="Chat message form"
           >
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <line x1="22" y1="2" x2="11" y2="13" />
-              <polygon points="22 2 15 22 11 13 2 9 22 2" />
-            </svg>
-          </button>
+            <div className="flex items-end gap-2 glass rounded-2xl p-1.5 shadow-lg shadow-primary/5">
+              <div className="flex-1 relative">
+                <input
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  placeholder="Ask about scoring a lead..."
+                  disabled={isLoading || retrying}
+                  className="w-full rounded-xl border-0 bg-transparent px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none disabled:opacity-50 transition-all"
+                  aria-label="Message input"
+                />
+              </div>
+              {isLoading ? (
+                <button
+                  type="button"
+                  onClick={stop}
+                  className="shrink-0 w-10 h-10 rounded-xl bg-muted text-muted-foreground hover:text-foreground hover:bg-card-hover flex items-center justify-center transition-colors focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
+                  aria-label="Stop generating response"
+                >
+                  <Square className="w-4 h-4" aria-hidden="true" />
+                </button>
+              ) : (
+                <button
+                  type="submit"
+                  disabled={!input.trim() || isLoading || retrying}
+                  className="shrink-0 w-10 h-10 rounded-xl bg-gradient-to-r from-primary to-accent text-primary-foreground flex items-center justify-center hover:shadow-lg hover:shadow-primary/30 hover:scale-[1.05] active:scale-[0.95] transition-all duration-200 disabled:opacity-40 disabled:hover:shadow-none disabled:hover:scale-100 focus-visible:outline-2 focus-visible:outline-white focus-visible:outline-offset-2"
+                  aria-label="Send message"
+                >
+                  <Send className="w-4 h-4" aria-hidden="true" />
+                </button>
+              )}
+            </div>
+          </form>
         </div>
-      </form>
+      </div>
     </div>
   );
 }

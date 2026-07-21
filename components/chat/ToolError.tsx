@@ -1,32 +1,27 @@
 "use client";
 
+import { AlertTriangle, RefreshCw } from "lucide-react";
+
 export default function ToolError({ errorText }: { errorText: string }) {
   return (
-    <div className="rounded-xl border border-red-500/20 bg-red-500/5 p-4 space-y-2">
-      <div className="flex items-center gap-2">
-        <div className="w-7 h-7 rounded-full bg-red-500/15 flex items-center justify-center">
-          <svg
-            width="14"
-            height="14"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="text-red-400"
-          >
-            <circle cx="12" cy="12" r="10" />
-            <line x1="12" y1="8" x2="12" y2="12" />
-            <line x1="12" y1="16" x2="12.01" y2="16" />
-          </svg>
+    <div
+      className="rounded-xl border border-error/20 bg-error/5 p-4 space-y-3 shadow-sm"
+      role="alert"
+      aria-live="assertive"
+    >
+      <div className="flex items-start gap-3">
+        <div className="w-9 h-9 rounded-xl bg-error/10 flex items-center justify-center shrink-0">
+          <AlertTriangle className="w-4.5 h-4.5 text-error" aria-hidden="true" />
         </div>
-        <span className="text-sm font-medium text-red-400">Tool Error</span>
+        <div className="flex-1 min-w-0 pt-0.5">
+          <p className="text-sm font-semibold text-error">Tool Error</p>
+          <p className="text-sm text-error/80 mt-0.5">{errorText}</p>
+          <p className="text-xs text-error/60 mt-1.5 flex items-center gap-1">
+            <RefreshCw className="w-3 h-3" aria-hidden="true" />
+            You can try again or rephrase your request.
+          </p>
+        </div>
       </div>
-      <p className="text-sm text-red-300/80">{errorText}</p>
-      <p className="text-xs text-red-400/60">
-        You can try again or rephrase your request.
-      </p>
     </div>
   );
 }
