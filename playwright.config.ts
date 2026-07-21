@@ -14,7 +14,7 @@ export default defineConfig({
     reuseExistingServer: !process.env.CI,
     timeout: 30000,
     env: {
-      GOOGLE_GENERATIVE_AI_API_KEY: "test-mock-key",
+      GROQ_API_KEY: "test-mock-key",
     },
   },
 });

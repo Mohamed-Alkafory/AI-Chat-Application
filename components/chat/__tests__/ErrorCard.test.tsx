@@ -17,10 +17,10 @@ describe("ErrorCard", () => {
     expect(screen.getByText("Network error")).toBeInTheDocument();
     expect(
       screen.getByText(
-        "Unable to reach the AI service. Please check your internet connection and try again.",
+        "Unable to reach the AI service. Please check your internet connection.",
       ),
     ).toBeInTheDocument();
-    expect(screen.getByText("Retry")).toBeInTheDocument();
+    expect(screen.getByText("Try again")).toBeInTheDocument();
   });
 
   it("renders rate-limit error", () => {
@@ -60,7 +60,7 @@ describe("ErrorCard", () => {
     );
 
     expect(
-      screen.getByText("Connection lost while generating"),
+      screen.getByText("Connection lost"),
     ).toBeInTheDocument();
   });
 
@@ -77,7 +77,7 @@ describe("ErrorCard", () => {
       />,
     );
 
-    await user.click(screen.getByText("Retry"));
+    await user.click(screen.getByText("Try again"));
     expect(onRetry).toHaveBeenCalledTimes(1);
   });
 

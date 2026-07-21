@@ -80,12 +80,12 @@ describe("MessageList", () => {
 
   it("shows loading skeleton and typing dots when isLoading", () => {
     const messages = [makeUserMessage("1", "Score a lead")];
-    render(<MessageList {...defaultProps} messages={messages} isLoading={true} />);
+    const { container } = render(<MessageList {...defaultProps} messages={messages} isLoading={true} />);
 
-    const typingDots = screen.getAllByRole("generic");
-    const hasDot = typingDots.some(
-      (el) => el.className.includes("animate-dot-1") || el.className.includes("animate-pulse"),
-    );
-    expect(hasDot).toBe(true);
+    const skeleton = container.querySelector(".animate-pulse");
+    expect(skeleton).toBeTruthy();
+
+    const dots = container.querySelector(".animate-dot-1");
+    expect(dots).toBeTruthy();
   });
 });

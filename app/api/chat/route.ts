@@ -1,5 +1,5 @@
 import { streamText, isStepCount, convertToModelMessages } from "ai";
-import { google } from "@ai-sdk/google";
+import { groq } from "@ai-sdk/groq";
 import { scoreLeadTool } from "@/tools/scoreLead";
 
 export async function POST(request: Request) {
@@ -53,11 +53,11 @@ export async function POST(request: Request) {
       }
     }
 
-    if (!process.env.GOOGLE_GENERATIVE_AI_API_KEY) {
+    if (!process.env.GROQ_API_KEY) {
       return new Response(
         JSON.stringify({
           error:
-            "GOOGLE_GENERATIVE_AI_API_KEY is not configured. Set it in your environment variables.",
+            "GROQ_API_KEY is not configured. Set it in your environment variables.",
         }),
         { status: 500, headers: { "Content-Type": "application/json" } },
       );
@@ -66,7 +66,7 @@ export async function POST(request: Request) {
     const modelMessages = await convertToModelMessages(messages);
 
     const result = streamText({
-      model: google("gemini-2.0-flash"),
+      model: groq("llama-3.3-70b-versatile"),
       system:
         "You are an AI assistant with access to a lead scoring tool. " +
         "When the user provides lead information (name, company, and budget), " +

@@ -1,48 +1,40 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { Zap, Layers, Palette, Shield } from "lucide-react";
 
 const features = [
   {
-    icon: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
-      </svg>
-    ),
+    icon: Zap,
     title: "Streaming Responses",
-    description: "Real-time token-by-token streaming delivers responses as they're generated, just like a natural conversation.",
+    description:
+      "Real-time token-by-token streaming delivers responses as they're generated, just like a natural conversation.",
+    gradient: "from-primary/20 to-accent/20",
+    iconColor: "text-primary",
   },
   {
-    icon: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6" />
-        <line x1="8" y1="2" x2="8" y2="18" />
-        <line x1="16" y1="6" x2="16" y2="22" />
-      </svg>
-    ),
+    icon: Layers,
     title: "AI Tool Calling",
-    description: "Seamlessly invoke tools and functions during conversations for code execution, data lookup, and more.",
+    description:
+      "Seamlessly invoke tools and functions during conversations for code execution, data lookup, and more.",
+    gradient: "from-accent/20 to-purple-500/20",
+    iconColor: "text-accent",
   },
   {
-    icon: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <rect x="3" y="3" width="18" height="18" rx="2" />
-        <line x1="3" y1="9" x2="21" y2="9" />
-        <line x1="9" y1="21" x2="9" y2="9" />
-      </svg>
-    ),
+    icon: Palette,
     title: "Modern UI",
-    description: "Clean, responsive interface built with Tailwind CSS and Framer Motion for a premium user experience.",
+    description:
+      "Clean, responsive interface built with Tailwind CSS and Framer Motion for a premium user experience.",
+    gradient: "from-primary/20 to-purple-500/20",
+    iconColor: "text-primary",
   },
   {
-    icon: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <rect x="3" y="11" width="18" height="11" rx="2" />
-        <path d="M7 11V7a5 5 0 0110 0v4" />
-      </svg>
-    ),
+    icon: Shield,
     title: "Secure Server API",
-    description: "All API calls are proxied through your server, keeping your keys secure and your data private.",
+    description:
+      "All API calls are proxied through your server, keeping your keys secure and your data private.",
+    gradient: "from-accent/20 to-primary/20",
+    iconColor: "text-accent",
   },
 ];
 
@@ -64,7 +56,11 @@ const cardVariants = {
 
 export default function Features() {
   return (
-    <section id="features" className="py-24 relative">
+    <section
+      id="features"
+      className="py-24 relative"
+      aria-labelledby="features-heading"
+    >
       <div className="absolute inset-0 bg-gradient-to-b from-background via-primary/3 to-background pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -75,13 +71,16 @@ export default function Features() {
           transition={{ duration: 0.5 }}
           className="text-center mb-16"
         >
-          <h2 className="text-3xl sm:text-4xl font-bold">
+          <h2
+            id="features-heading"
+            className="text-3xl sm:text-4xl lg:text-5xl font-bold"
+          >
             Built for{" "}
             <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
               Modern AI
             </span>
           </h2>
-          <p className="mt-4 text-muted-foreground max-w-2xl mx-auto">
+          <p className="mt-4 text-muted-foreground max-w-2xl mx-auto text-lg">
             Everything you need to build powerful AI-powered applications with a focus on developer experience.
           </p>
         </motion.div>
@@ -93,21 +92,29 @@ export default function Features() {
           viewport={{ once: true }}
           className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6"
         >
-          {features.map((feature) => (
-            <motion.div
-              key={feature.title}
-              variants={cardVariants}
-              className="group rounded-2xl border border-border bg-card p-6 hover:bg-card-hover hover:border-primary/30 transition-all duration-300 hover:shadow-lg hover:shadow-primary/5"
-            >
-              <div className="w-10 h-10 rounded-lg bg-primary/10 text-primary flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
-                {feature.icon}
-              </div>
-              <h3 className="text-lg font-semibold mb-2">{feature.title}</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                {feature.description}
-              </p>
-            </motion.div>
-          ))}
+          {features.map((feature) => {
+            const Icon = feature.icon;
+            return (
+              <motion.div
+                key={feature.title}
+                variants={cardVariants}
+                className="group relative rounded-2xl glass p-6 hover:bg-card-hover hover:border-primary/30 transition-all duration-300 hover:shadow-xl hover:shadow-primary/5 hover:-translate-y-0.5"
+              >
+                <div
+                  className={`w-11 h-11 rounded-xl bg-gradient-to-br ${feature.gradient} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}
+                  aria-hidden="true"
+                >
+                  <Icon className={`w-5 h-5 ${feature.iconColor}`} />
+                </div>
+                <h3 className="text-lg font-semibold mb-2 text-foreground">
+                  {feature.title}
+                </h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  {feature.description}
+                </p>
+              </motion.div>
+            );
+          })}
         </motion.div>
       </div>
     </section>
